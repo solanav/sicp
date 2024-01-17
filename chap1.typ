@@ -47,7 +47,7 @@ nil
   ((if (> b 0) + -) a b))
 ```
 
-This procdedure returns the sum of `a` and `b` if `b` is over zero, if its under zero it substracts them.
+This procedure returns the sum of `a` and `b` if `b` is over zero, if its under zero it substracts them.
 
 == Exercise 1.5
 
