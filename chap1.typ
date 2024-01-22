@@ -334,7 +334,7 @@ Results:
 ...
 ```
 
-== 1.14
+== Exercise 1.14
 
 The process tree is the following:
 
@@ -342,7 +342,7 @@ The process tree is the following:
 
 The ammount of space is $Theta(n)$ because in the worse case (changing with only one type of coin) we will get a tree of depth $n$ and this is a recursive procedure.
 
-== 1.15
+== Exercise 1.15
 
 The number of times this procedure is applied is as many as it takes to make its value < 0.1 by dividing it by 3. And then one more. More concisely:
 
