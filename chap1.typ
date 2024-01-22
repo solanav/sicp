@@ -4,7 +4,7 @@ Exercises for SICP chapter 1.
 
 == Exercise 1.1
 
-```clojure
+```clj
 10
 12
 8
@@ -22,7 +22,7 @@ nil
 
 == Exercise 1.2
 
-```clojure
+```clj
 (/
   (+ 5 4 (- 2 (- 3 (+ 6 (/ 4 5)))))
   (* 3 (- 6 2) (- 2 7)))
@@ -30,7 +30,7 @@ nil
 
 == Exercise 1.3
 
-```clojure
+```clj
 (define (sum-of-squares a b)
   (+ (* a a) (* b b)))
 
@@ -42,7 +42,7 @@ nil
 
 == Exercise 1.4
 
-```clojure
+```clj
 (define (a-plus-abs-b a b)
   ((if (> b 0) + -) a b))
 ```
@@ -51,7 +51,7 @@ This procedure returns the sum of `a` and `b` if `b` is over zero, if its under 
 
 == Exercise 1.5
 
-```clojure
+```clj
 (define (p) (p))
 
 (define (test x y)
@@ -64,7 +64,7 @@ This procedure returns the sum of `a` and `b` if `b` is over zero, if its under 
 
 In an interpreter with applicative-order evaluation, Ben will observe the following substitution/evaluation behaviour:
 
-```clojure
+```clj
 (test 0 (p))
 
 (test 0 (p))
@@ -76,7 +76,7 @@ In an interpreter with applicative-order evaluation, Ben will observe the follow
 
 While in an interpreter with normal-order evaluation, Ben will observe the following substitution/evaluation behaviour:
 
-```clojure
+```clj
 (test 0 (p))
 
 (if (= 0 0)
@@ -94,7 +94,7 @@ While in an interpreter with normal-order evaluation, Ben will observe the follo
 
 If is a special form because it needs to not evaluate the `then-clause` and `else-clause` until we determine wether the predicate is true or false. If we use this `new-if` procedure, it will be stuck evaluating forever due to the recursive call used in the `else-clause`:
 
-```clojure
+```clj
 (sqrt-iter
   (improve guess x)
   x)
@@ -104,7 +104,7 @@ If is a special form because it needs to not evaluate the `then-clause` and `els
 
 The `good-enough?` procedure is ineffective with small numbers because when they are close to 0.001 or less, `good-enough?` will return `true` even if its not even close.
 
-```clojure
+```clj
 > (sqrt 0.0001)
 0.03230844833048122
 
@@ -114,14 +114,14 @@ The `good-enough?` procedure is ineffective with small numbers because when they
 
 On the other hand, with very big numbers, the algorithm requires a precission too high (relative to the square root we are trying to find) so it takes a lot of operations to get to the results.
 
-```clojure
+```clj
 > (sqrt 10000000)
 This takes too long...
 ```
 
 This is the implementation of the new way of computing square roots:
 
-```clojure
+```clj
 (define (square x)
   (* x x))
 
@@ -157,7 +157,7 @@ This is the implementation of the new way of computing square roots:
   (sqrt-iter2 2 1 x))
 ```
 
-```clojure
+```clj
 > (* (sqrt2 10000000) (sqrt2 10000000))
 10000000.XXX
 ```
@@ -165,7 +165,7 @@ This is the implementation of the new way of computing square roots:
 
 Implementation code:
 
-```clojure
+```clj
 (define (square x)
   (* x x))
 
@@ -195,7 +195,7 @@ Implementation code:
 
 Proof of the results:
 
-```clojure
+```clj
 > (cube (cube-root 50))
 50.XXX
 ```
@@ -204,7 +204,7 @@ Proof of the results:
 
 The procedure:
 
-```clojure
+```clj
 (define (+ a b)
   (if (= a 0)
     b
@@ -213,7 +213,7 @@ The procedure:
 
 Would be expanded like so:
 
-```clojure
+```clj
 (+ 4 5)
 (inc (+ 3 5))
 (inc (inc (+ 2 5)))
@@ -230,7 +230,7 @@ So this is a recursive procedure that implements a recursive process.
 
 The second procedure:
 
-```clojure
+```clj
 (define (+ a b)
   (if (= a 0)
     b
@@ -239,7 +239,7 @@ The second procedure:
 
 Would be expanded like so:
 
-```clojure
+```clj
 (+ 4 5)
 (+ (dec 4) (inc 5))
 (+ 3 6)
@@ -256,7 +256,7 @@ Would be expanded like so:
 
 The results are:
 
-```clojure
+```clj
 1024
 65536
 65536
@@ -267,3 +267,69 @@ $ f(n) = 2n $
 $ g(n) = 2^n $
 $ h(n) = 2^h(n-1) $
 $ k(n) = 5n^2 $
+
+== Exercise 1.11
+
+```clj
+(define (sum-mul a b c)
+  (+ (* 1 a)
+     (* 2 b)
+     (* 3 c)))
+
+(define (recursive-f n)
+  (if (< n 3) n
+      (sum-mul (recursive-f (- n 1))
+               (recursive-f (- n 2))
+               (recursive-f (- n 3)))))
+
+(define (iterative-f n)
+  (define (aux n i a b c)
+    (cond ((< n 3) n)
+          ((= n i) (sum-mul a b c))
+          (else (aux n (+ i 1) (sum-mul a b c) a b))))
+  (aux n 3 2 1 0))
+```
+
+== Exercise 1.12
+
+Function definitions:
+
+```clj
+(define (pascal-next l)
+  "Returns the next list in the pascal triangle"
+  (define (pascal-next-iter l f)
+    (if (= 1 (length l))
+        l
+        (append
+         (if (= f 0)
+             (list (car l) (+ (car l) (cadr l)))
+             (list (+ (car l) (cadr l))))
+         (pascal-next-iter (cdr l) 1))))
+  (pascal-next-iter l 0))
+
+(define (pascal-list n)
+  (cond ((= n 2)
+         (display '(1))
+         (newline)
+         (display '(1 1))
+         (newline)
+         '(1 1))
+        (else (let ((res (pascal-next (pascal-list (- n 1)))))
+                (display res)
+                (newline)
+                res))))
+```
+
+Results:
+
+```clj
+> (pascal-list 20)
+(1)
+(1 1)
+(1 2 1)
+(1 3 3 1)
+(1 4 6 4 1)
+(1 5 10 10 5 1)
+(1 6 15 20 15 6 1)
+...
+```
