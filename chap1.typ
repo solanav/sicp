@@ -333,3 +333,19 @@ Results:
 (1 6 15 20 15 6 1)
 ...
 ```
+
+== 1.14
+
+The process tree is the following:
+
+#figure(image("images/1_14.png", width: 80%))
+
+The ammount of space is $Theta(n)$ because in the worse case (changing with only one type of coin) we will get a tree of depth $n$ and this is a recursive procedure.
+
+== 1.15
+
+The number of times this procedure is applied is as many as it takes to make its value < 0.1 by dividing it by 3. And then one more. More concisely:
+
+$ n = ⌈log_3(0.1/n)⌉ + 1$
+
+The space taken and the operations made by this procedure are $log(n)$.
