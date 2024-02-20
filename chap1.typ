@@ -349,3 +349,125 @@ The number of times this procedure is applied is as many as it takes to make its
 $ n = ⌈log_3(0.1/n)⌉ + 1$
 
 The space taken and the operations made by this procedure are $log(n)$.
+
+== Exercise 1.34
+
+```clj
+(define (f g)
+  (g 2))
+
+(f f)
+(f 2)
+(2 2)
+Error
+```
+
+== Exercise 2.1
+
+```clj
+(define (make-rat n d)
+  (let* ((g (gcd n d))
+         (num (/ n g))
+         (den (/ d g)))
+    (if (and (< den 0) (> num 0))
+        (cons (* -1 num) (* -1 den))
+        (cons num den))))
+```
+
+== Exercise 2.2
+
+```clj
+(define (make-segment x y)
+  (cons x y))
+
+(define (start-segment s)
+  (car s))
+
+(define (end-segment s)
+  (cdr s))
+
+(define (make-point x y)
+  (cons x y))
+
+(define (x-point p)
+  (car p))
+
+(define (y-point p)
+  (cdr p))
+
+(define (avg a b)
+  (/ (+ a b) 2))
+
+(define (midpoint-segment s)
+  (let* ((p1 (start-segment s))
+         (p2 (end-segment s))
+         (x1 (x-point p1))
+         (y1 (y-point p1))
+         (x2 (x-point p2))
+         (y2 (y-point p2)))
+    (make-point (avg x1 x2) (avg y1 y2))))
+
+(define (print-point p)
+  (display "(")
+  (display (x-point p))
+  (display ",")
+  (display (y-point p))
+  (display ")"))
+
+(define (print-segment s)
+  (print-point (start-segment s))
+  (display " -> ")
+  (print-point (end-segment s)))
+
+(let ((s (make-segment (make-point 1 2) (make-point 4 8))))
+  (print-segment s)
+  (newline)
+  (print-point (midpoint-segment s)))
+```
+
+== Exercise 2.5
+
+```clj
+(define (num-div x y)
+  (define (aux-num-div x y c)
+    (if (= (modulo x y) 0)
+        (aux-num-div (/ x y) y (+ 1 c))
+        c))
+  (aux-num-div x y 0))
+
+(define (p-cons x y)
+  (* (expt 2 x) (expt 3 y)))
+
+(define (p-car p)
+  (num-div p 2))
+
+(define (p-cdr p)
+  (num-div p 3))
+```
+
+== Exercise 2.6
+
+```clj
+(define zero (lambda (f) (lambda (x) x)))
+
+(define one
+  (lambda (f)
+    (lambda (x)
+      (f (lambda (x) x)))))
+
+(define two
+  (lambda (f)
+    (lambda (x)
+      (f (f (lambda (x) x))))))
+
+(define (church-add x y)
+  (x (y (lambda (f) (lambda (x))))))
+  
+
+(define (add-1 n)
+  (lambda (f)
+    (lambda (x)
+      (f ((n f) x)))))
+
+(lambda (f) (lambda (x) (f (((lambda (f) (lambda (x) x)) f) x))))
+```
